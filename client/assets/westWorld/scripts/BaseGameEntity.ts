@@ -1,7 +1,7 @@
 
-export default abstract class BaseGameEntity {
+export default class BaseGameEntity extends cc.Component {
 
-    private id: number
+    protected id: number
 
     static nextId: number = 0
 
@@ -13,7 +13,9 @@ export default abstract class BaseGameEntity {
         return this.id
     }
 
-    abstract update(dt: number): void
+    update(dt: number): void {
+
+    }
 
 
 }
