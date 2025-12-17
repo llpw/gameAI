@@ -7,6 +7,7 @@ export default class BaseGameEntity extends cc.Component {
 
     setID(val: number) {
         this.id = val
+        BaseGameEntity.nextId = this.id + 1
     }
 
     getID() {

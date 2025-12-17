@@ -1,4 +1,4 @@
-import EnterMineAndDigForNugget, { enterMineAndDigForNugget } from "./EnterMineAndDigForNugget";
+import { enterMineAndDigForNugget } from "./EnterMineAndDigForNugget";
 import Miner from "./Miner";
 import State from "./State";
 import { LocationType } from "./WestWorldEnum";
@@ -16,7 +16,7 @@ export default class QuenchThirst extends State {
         miner.buyAndDrinkAWhiskey()
         miner.updateTip(' Miner ' + miner.getID() + ' drinking whiskey.')
         if (miner.thirst <= 0) {
-            miner.changeState(enterMineAndDigForNugget)
+            miner.getFSM().changeState(enterMineAndDigForNugget)
         }
     }
 

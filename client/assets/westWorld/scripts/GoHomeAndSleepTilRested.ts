@@ -14,7 +14,7 @@ export default class GoHomeAndSleepTilRested extends State {
     excute(miner: Miner): void {
         miner.decreaseFatigue()
         if (miner.fatigue <= 0) {
-            miner.changeState(enterMineAndDigForNugget)
+            miner.getFSM().changeState(enterMineAndDigForNugget)
         } else {
             miner.updateTip(' Miner ' + miner.getID() + ' ZZZZZZ...')
         }

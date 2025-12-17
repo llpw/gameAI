@@ -1,6 +1,6 @@
 import BaseGameEntity from "./BaseGameEntity";
-import GoHomeAndSleepTilRested from "./GoHomeAndSleepTilRested";
-import State from "./State";
+import { goHomeAndSleepTilRested } from "./GoHomeAndSleepTilRested";
+import StateMachine from "./StateMachine";
 import { CONST_VAL } from "./WestWorldConst";
 import { LocationType } from "./WestWorldEnum";
 
@@ -9,8 +9,9 @@ const { ccclass, property } = cc._decorator
 @ccclass('Miner')
 export default class Miner extends BaseGameEntity {
 
-    private currentState: State
-    private currentLocation = LocationType.GoldMine
+
+    private stateMachine: StateMachine
+    private currentLocation: LocationType
 
     @property(cc.Label) tips: cc.Label = null
 
@@ -24,13 +25,13 @@ export default class Miner extends BaseGameEntity {
 
     constructor() {
         super()
-        this.currentState = new GoHomeAndSleepTilRested()
-        this.currentLocation = LocationType.Shack
         this.goldCarried = 0
         this.moneyInBank = 0
         this.thirst = 0
         this.fatigue = 0
-        this.setID(1)
+        this.setID(BaseGameEntity.nextId)
+        this.stateMachine = new StateMachine(this)
+        this.stateMachine.setCurrentState(goHomeAndSleepTilRested)
     }
 
     setID(val: number): void {
@@ -39,21 +40,17 @@ export default class Miner extends BaseGameEntity {
 
     update(dt: number): void {
         this.thirst += 1
-        if (this.currentState) {
-            this.currentState.excute(this)
-        }
+        this.stateMachine.update()
     }
 
-    changeState(state: State): void {
-        console.assert(!!(this.currentState && state), 'Invalid state transition')
-        this.currentState.exit(this)
-        this.currentState = state
-        this.currentState.enter(this)
+    getFSM() {
+        return this.stateMachine
     }
 
     getLocation() {
         return this.currentLocation
     }
+
 
     changeLocation(location: LocationType) {
         this.currentLocation = location
@@ -74,6 +71,7 @@ export default class Miner extends BaseGameEntity {
                 break;
         }
     }
+
 
     setGoldCarried(amount: number) {
         this.goldCarried = amount

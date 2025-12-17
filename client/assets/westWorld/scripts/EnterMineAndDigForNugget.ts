@@ -18,13 +18,13 @@ export default class EnterMineAndDigForNugget extends State {
         miner.increaseFatigue()
         miner.addThirst(Math.random() > 0.5 ? 1 : 0)
         if (miner.pocketsFull()) {
-            miner.changeState(visitBankAndDepositGold)
+            miner.getFSM().changeState(visitBankAndDepositGold)
         }
         else if (miner.thirsted()) {
-            miner.changeState(quenchThirst)
+            miner.getFSM().changeState(quenchThirst)
         }
         else if (miner.fatigued()) {
-            miner.changeState(goHomeAndSleepTilRested)
+            miner.getFSM().changeState(goHomeAndSleepTilRested)
         }
     }
 

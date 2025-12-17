@@ -7,3 +7,8 @@ export enum LocationType {
     Shack,
 
 }
+
+export enum EntityType {
+    MinerBob,
+    Elsa,
+}

@@ -17,9 +17,9 @@ export default class VisitBankAndDepositGold extends State {
         miner.addGoldCarried(-1)
         miner.updateTip(' Miner ' + miner.getID() + ' depositing gold at the bank.')
         if (miner.moneyInBank >= CONST_VAL.ComfortLevel) {
-            miner.changeState(goHomeAndSleepTilRested)
+            miner.getFSM().changeState(goHomeAndSleepTilRested)
         } else if (miner.goldCarried <= 0) {
-            miner.changeState(enterMineAndDigForNugget)
+            miner.getFSM().changeState(enterMineAndDigForNugget)
         }
     }
 

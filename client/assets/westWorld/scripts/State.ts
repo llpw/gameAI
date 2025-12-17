@@ -1,13 +1,14 @@
+import BaseGameEntity from "./BaseGameEntity";
 import Miner from "./Miner";
 
 export default class State {
-    enter(miner: Miner): void {
+    enter(miner: BaseGameEntity): void {
 
     }
-    excute(miner: Miner): void {
+    excute(miner: BaseGameEntity): void {
 
     }
 
-    exit(miner: Miner): void {
+    exit(miner: BaseGameEntity): void {
     }
 }
