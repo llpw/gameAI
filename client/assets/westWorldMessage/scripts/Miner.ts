@@ -1,7 +1,8 @@
+
+import { StateMachine } from "../../common/fsm/StateMachine";
+import { BaseGameEntity } from "../../common/game/BaseGameEntity";
 import { Telegram } from "../../common/message/Telegram";
-import BaseGameEntity from "./BaseGameEntity";
 import { goHomeAndSleepTilRested } from "./GoHomeAndSleepTilRested";
-import StateMachine from "./StateMachine";
 import { CONST_VAL } from "./WestWorldConst";
 import { LocationType } from "./WestWorldEnum";
 
@@ -33,10 +34,6 @@ export default class Miner extends BaseGameEntity {
         this.setID(BaseGameEntity.nextId)
         this.stateMachine = new StateMachine(this)
         this.stateMachine.setCurrentState(goHomeAndSleepTilRested)
-    }
-
-    setID(val: number): void {
-        this.id = val
     }
 
     update(dt: number): void {
@@ -133,4 +130,7 @@ export default class Miner extends BaseGameEntity {
         this.tips.string = tip
     }
 
+    public handleMessage(telegram: Telegram): boolean {
+        return this.stateMachine.handleMessage(telegram)
+    }
 }
