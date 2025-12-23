@@ -1,5 +1,5 @@
 import { State } from "../../../common/fsm/State"
-import { BaseGameEntity } from "../../../common/game/BaseGameEntity"
+import { dispatcher } from "../../../common/message/MessageDispatcher"
 import { MessageType } from "../../../common/message/MessageType"
 import { Telegram } from "../../../common/message/Telegram"
 import MinerWife from "../MinerWife"
@@ -24,7 +24,12 @@ class WifeGlobalState extends State {
     onMessage(entity: MinerWife, msg: Telegram): boolean {
         switch (msg.msg) {
             case MessageType.HiHoneyImHome:
-                entity.updateTip(' Miner ' + entity.getID() + ' all right.')
+                entity.updateTip(' Miner wife' + entity.getID() + ' all right.')
+                entity.getFSM().changeState(cookStew)
+                return true
+            case MessageType.CookStewDone:
+                entity.updateTip('honey, come here, eating stew.')
+                entity.getFSM().changeState(doHouseWork)
                 return true
         }
         return false
@@ -36,7 +41,7 @@ class VisitBathroom extends State {
 
     }
     excute(miner: MinerWife): void {
-        miner.updateTip(' Miner ' + miner.getID() + ' visiting the bathroom.')
+        miner.updateTip(' Miner wife ' + miner.getID() + ' visiting the bathroom.')
     }
     exit(miner: MinerWife): void {
 
@@ -50,11 +55,11 @@ class DoHouseWork extends State {
     excute(miner: MinerWife): void {
         const random = randomInt(1, 3)
         if (random === 1) {
-            miner.updateTip(' Miner ' + miner.getID() + ' cleaning clothes.')
+            miner.updateTip(' Miner wife' + miner.getID() + ' cleaning clothes.')
         } else if (random === 2) {
-            miner.updateTip(' Miner ' + miner.getID() + ' cleaning the house.')
+            miner.updateTip(' Miner wife' + miner.getID() + ' cleaning the house.')
         } else {
-            miner.updateTip(' Miner ' + miner.getID() + ' cooking.')
+            miner.updateTip(' Miner wife' + miner.getID() + ' cooking.')
         }
     }
 
@@ -63,7 +68,20 @@ class DoHouseWork extends State {
     }
 }
 
+class CookStew extends State {
+    enter(miner: MinerWife): void {
+        dispatcher.dispatchMessage(3, miner.getID(), miner.getID(), MessageType.CookStewDone)
+    }
+    excute(miner: MinerWife): void {
+        miner.updateTip('honey, i am cooking stew.')
+    }
+    exit(miner: MinerWife): void {
+
+    }
+}
+
 const visitBathroom = new VisitBathroom()
 const doHouseWork = new DoHouseWork()
+const cookStew = new CookStew()
 const wifeGlobalState = new WifeGlobalState()
-export { visitBathroom, doHouseWork, wifeGlobalState }
+export { visitBathroom, doHouseWork, cookStew, wifeGlobalState }
